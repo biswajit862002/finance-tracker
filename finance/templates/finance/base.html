@@ -1,0 +1,35 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body class="bg-gray-100">
+    
+    <nav class="bg-indigo-500 p-4 text-white">
+
+        {% if user.is_authenticated %}
+            <form action="{% url "logout" %}" method="post" id="logout-form" style="display: inline;">
+            {% csrf_token %}
+                <a href="#" onclick="document.getElementById('logout-form').submit();" class="ml-4">Logout</a>
+            </form>
+        
+         {% else %}
+            <a href="{% url "login" %}" class="ml-4">Login</a>
+            <a href="{% url "register" %}" class="ml-4">Register</a>
+
+        {% endif %}
+
+        
+
+    </nav> 
+
+    {% comment %} {% include "finance/navbar.html" %} {% endcomment %}
+
+    {% block content %}{% endblock content %}
+
+</body>
+</html>
