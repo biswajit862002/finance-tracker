@@ -17,11 +17,15 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include('authentication.urls')),
+    path('', RedirectView.as_view(url='/finance/home', permanent=False)),
+    # path("", include('authentication.urls')),
     path("authentication/", include('authentication.urls')),
+
+    path("", include('finance.urls')),
     path("finance/", include('finance.urls')),
     path("accounts/", include('django.contrib.auth.urls')),
 

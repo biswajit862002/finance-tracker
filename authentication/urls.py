@@ -1,10 +1,10 @@
 from django.urls import path
-from authentication.views import RegisterView, DashboardView
+from authentication.views import RegisterView
 from django.contrib.auth import views as auth_views
+from authentication import views
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name='register'),
-    path("", DashboardView.as_view(), name='dashboard'),
 
     path(
         "accounts/password_reset/",
@@ -16,5 +16,10 @@ urlpatterns = [
         ),
         name="password_reset",  # place this outside the as_view()
     ),
+
+    path("change-password/", views.user_change_pass, name='changepass'),
+    path("profile/", views.user_profile, name='profile'),
+
+
 
 ]

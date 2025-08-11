@@ -1,35 +1,330 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{% block title %}{% endblock title %}</title>
-</head>
-<body class="bg-gray-100">
-    
-    <nav class="bg-indigo-500 p-4 text-white">
+        {% comment %} this link is for font awesome {% endcomment %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"/>
 
-        {% if user.is_authenticated %}
-            <form action="{% url "logout" %}" method="post" id="logout-form" style="display: inline;">
-            {% csrf_token %}
-                <a href="#" onclick="document.getElementById('logout-form').submit();" class="ml-4">Logout</a>
-            </form>
-        
-         {% else %}
-            <a href="{% url "login" %}" class="ml-4">Login</a>
-            <a href="{% url "register" %}" class="ml-4">Register</a>
+        {% comment %} this link is for google fonts poppins {% endcomment %}
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
+        {% comment %} link tailwind css file {% endcomment %}
+        <link rel="stylesheet" href="{% static "finance/css/main.css" %}">
+
+        {% comment %} link css file {% endcomment %}
+        <link rel="stylesheet" href="{% static "finance/css/style.css" %}">
+
+        <title>{% block title %}{% endblock title %}</title>
+    </head>
+    <body class="bg-gray-100">
+
+        {% include "finance/navbar.html" %} 
+
+        {% if messages %}
+            <div class="flex justify-center mt-6 px-4">
+                {% for message in messages %}
+                    <div 
+                        x-data="{ show: true }" 
+                        x-show="show" 
+                        class="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 p-4 text-green-800 bg-green-200 rounded-lg shadow-lg" 
+                        role="alert"
+                    >
+                        {{ message }}
+                        <button @click="show = false" class="float-right font-bold cursor-pointer text-gray-800">✖</button>
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
 
-        
+        {% block content %}{% endblock content %}
 
-    </nav> 
+        {% include "finance/footer.html" %} 
 
-    {% comment %} {% include "finance/navbar.html" %} {% endcomment %}
 
-    {% block content %}{% endblock content %}
+        <!--for navbar -->
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
 
-</body>
+        <!-- Alpine.js CDN (required for x-data, x-show, @click to work) for dismiss feature -->
+        <script src="https://unpkg.com/alpinejs" defer></script>
+
+        <!--using Chart.js, a simple and flexible JavaScript charting library.-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+        <!-- Chart.js Data Labels Plugin -->    
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+
+        <script>
+            const createPieChart = (ctxId, labels, data, colors) => {
+                const total = data.reduce((sum, val) => sum + val, 0);
+                const ctx = document.getElementById(ctxId).getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            datalabels: {
+                                color: '#000',
+                                formatter: (value, context) => {
+                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return `${percentage}%`;
+                                },
+                                font: {
+                                    weight: 'bold',
+                                    size: 12
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        let label = context.label || '';
+                                        let value = context.raw || 0;
+                                        return `${label}: ₹${value}`;
+                                    }
+                                }
+                            },
+                            title: {
+                                display: false,
+                            }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            };
+
+            // Pie Chart 1: Total
+            createPieChart("totalChart", ["Income", "Expense", "Savings"], [
+                {{ total_income|default:0 }}, {{ total_expense|default:0 }}, {{ net_savings|default:0 }}
+            ], ["#0ea5e9", "#22c55e", "#facc15"]);
+
+            // Pie Chart 2: Today
+            createPieChart("todayChart", ["Income", "Expense", "Savings"], [
+                {{ today_income|default:0 }}, {{ today_expense|default:0 }}, {{ today_savings|default:0 }}
+            ], ["#34d399", "#ef4444", "#facc15"]);
+
+            // Pie Chart 3: Yesterday
+            createPieChart("yesterdayChart", ["Income", "Expense", "Savings"], [
+                {{ yesterday_income|default:0 }}, {{ yesterday_expense|default:0 }}, {{ yesterday_savings|default:0 }}
+            ], ["#60a5fa", "#f87171", "#facc15"]);
+
+            // Pie Chart 4: Last 7 Days
+            createPieChart("weekChart", ["Income", "Expense", "Savings"], [
+                {{ last_7_days_income|default:0 }}, {{ last_7_days_expense|default:0 }}, {{ last_7_days_savings|default:0 }}
+            ], ["#4ade80", "#fb923c", "#facc15"]);
+
+            // Pie Chart 5: Last 30 Days
+            createPieChart("monthChart", ["Income", "Expense", "Savings"], [
+                {{ last_30_days_income|default:0 }}, {{ last_30_days_expense|default:0 }}, {{ last_30_days_savings|default:0 }}
+            ], ["#c084fc", "#f87171", "#facc15"]);
+
+            // Pie Chart 6: Current Year
+            createPieChart("yearChart", ["Income", "Expense", "Savings"], [
+                {{ current_year_income|default:0 }}, {{ current_year_expense|default:0 }}, {{ current_year_savings|default:0 }}
+            ], ["#0d9488", "#f87171", "#facc15"]);
+        </script>
+
+
+        <!--transaction list pie-chart script-->
+        <script>
+            const totalIncome = {{ total_income }};
+            const totalExpense = {{ total_expense }};
+            const totalSavings = {{ total_savings }};
+
+            const total = totalIncome + totalExpense + totalSavings;
+
+            const ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+
+            const incomeExpenseChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Income', 'Expense', 'Savings'],
+                    datasets: [{
+                        label: 'Income vs Expense vs Savings',
+                        data: [totalIncome, totalExpense, totalSavings],
+                        backgroundColor: ['#22c55e', '#ef4444', '#3b82f6'], // Green, Red, Blue
+                        borderColor: ['#15803d', '#b91c1c', '#1e40af'], // Darker shades
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            //text: 'Income vs Expense vs Savings'
+                        },
+                        datalabels: {
+                            color: '#fff',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            formatter: (value, context) => {
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return percentage + '%';
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        </script>
+
+
+
+
+        <!-- Include any additional chart script passed by child templates -->
+        {% block chart_script %}{% endblock chart_script %}
+
+
+        <!--expense report pie-chart script-->
+        <script>
+            if (typeof pieData !== 'undefined' && pieData.data.length) {
+                const ctx = document.getElementById('filteredPieChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: pieData.labels,
+                        datasets: [{
+                            data: pieData.data,
+                            backgroundColor: ['#34d399', '#ef4444', '#e7d212ff']
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let total = ctx.chart.data.datasets[0].data
+                                        .reduce((a, b) => a + b, 0);
+                                    return ((value / total) * 100).toFixed(1) + "%";
+                                },
+                                color: '#fff'
+                            },
+                            legend: { position: 'bottom' }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+            }
+        </script> 
+
+
+
+
+
+
+        <!--dashboard bar-graph script-->
+        <script>
+        // parse JSON passed from Django (context variables)
+        const last7Labels = {{ last7_labels_json|safe }};
+        const last7Income = {{ last7_income_json|safe }};
+        const last7Expense = {{ last7_expense_json|safe }};
+
+        const last30Labels = {{ last30_labels_json|safe }};
+        const last30Income = {{ last30_income_json|safe }};
+        const last30Expense = {{ last30_expense_json|safe }};
+
+        const yearLabels = {{ year_labels_json|safe }};
+        const yearIncome = {{ year_income_json|safe }};
+        const yearExpense = {{ year_expense_json|safe }};
+
+        // register datalabels plugin if you want values on bars
+        if (typeof ChartDataLabels !== 'undefined') {
+            Chart.register(ChartDataLabels);
+        }
+
+        const createGroupedBarChart = (ctxId, labels, incomeData, expenseData) => {
+            const ctx = document.getElementById(ctxId);
+            if (!ctx) return;
+
+            new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                {
+                    label: 'Income',
+                    data: incomeData,
+                    backgroundColor: '#34d399', // green
+                    borderColor: '#16a34a',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Expense',
+                    data: expenseData,
+                    backgroundColor: '#f87171', // red
+                    borderColor: '#ef4444',
+                    borderWidth: 1
+                }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                legend: { position: 'bottom' },
+                datalabels: {
+                    display: false, // set true if you want numeric labels on top of bars
+                    formatter: (value) => {
+                    // show 0 as blank
+                    return value ? new Intl.NumberFormat().format(value) : '';
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                    label: function(context) {
+                        const value = context.raw || 0;
+                        return `${context.dataset.label}: ₹${Number(value).toLocaleString()}`;
+                    }
+                    }
+                }
+                },
+                scales: {
+                x: {
+                    stacked: false,
+                    ticks: { maxRotation: 45, minRotation: 0 }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                    callback: function(value) {
+                        return '₹' + value.toLocaleString();
+                    }
+                    }
+                }
+                }
+            },
+            plugins: (typeof ChartDataLabels !== 'undefined') ? [ChartDataLabels] : []
+            });
+        };
+
+        // create charts
+        createGroupedBarChart('weekBarChart', last7Labels, last7Income, last7Expense);
+        createGroupedBarChart('monthBarChart', last30Labels, last30Income, last30Expense);
+        createGroupedBarChart('yearBarChart', yearLabels, yearIncome, yearExpense);
+        </script>
+
+
+
+    </body>
 </html>

@@ -3,6 +3,280 @@
 
 {% block content %}
 
-    <h1>Dashboard</h1>
+<div class="container mx-auto p-6">
+    <div class="text-center mb-8">
+        <h1 class="text-xl md:text-3xl font-bold my-3">Welcome <span class="text-xl md:text-4xl font-bold text-indigo-600 my-3">{{request.user|capfirst}}</span>, to Your Finance Dashboard</h1>
+        <p class="text-sm md:text-xl text-gray-700">Track your daily income, expenses, and golas effectively</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        <div class="bg-sky-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-money-bills mr-1"></i> Total Income</h2>
+            <p class="text-3xl font-bold ">₹ {{total_income|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-rose-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-wallet mr-1"></i> Total Expenses</h2>
+            <p class="text-3xl font-bold ">₹ {{total_expense|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-orange-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-piggy-bank mr-1"></i> Net savings</h2>
+            <p class="text-3xl font-bold ">₹ {{net_savings|floatformat:2}}</p>
+        </div>
+
+
+        <div class="bg-lime-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-money-bills mr-1"></i> Today's Income</h2>
+            <p class="text-3xl font-bold ">₹ {{today_income|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-teal-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-wallet mr-1"></i>Today's Expense</h2>
+            <p class="text-3xl font-bold ">₹ {{today_expense|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-cyan-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-piggy-bank mr-1"></i> Today's savings</h2>
+            <p class="text-3xl font-bold ">₹ {{today_savings|floatformat:2}}</p>
+        </div>
+
+
+        <div class="bg-pink-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-money-bills mr-1"></i> Yesterday's Income</h2>
+            <p class="text-3xl font-bold ">₹ {{yesterday_income|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-violet-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-wallet mr-1"></i>Yesterday's Expense</h2>
+            <p class="text-3xl font-bold ">₹ {{yesterday_expense|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-yellow-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-piggy-bank mr-1"></i> Yesterday's savings</h2>
+            <p class="text-3xl font-bold ">₹ {{yesterday_savings|floatformat:2}}</p>
+        </div>
+
+
+        <div class="bg-sky-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-money-bills mr-1"></i> Last 7 days Income</h2>
+            <p class="text-3xl font-bold ">₹ {{last_7_days_income|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-rose-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-wallet mr-1"></i>Last 7 days Expense</h2>
+            <p class="text-3xl font-bold ">₹ {{last_7_days_expense|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-orange-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-piggy-bank mr-1"></i> Last 7 days savings</h2>
+            <p class="text-3xl font-bold ">₹ {{last_7_days_savings|floatformat:2}}</p>
+        </div>
+
+
+
+        <div class="bg-lime-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-money-bills mr-1"></i> Last 30 days Income</h2>
+            <p class="text-3xl font-bold ">₹ {{last_30_days_income|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-teal-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-wallet mr-1"></i>Last 30 days Expense</h2>
+            <p class="text-3xl font-bold ">₹ {{last_30_days_expense|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-cyan-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-piggy-bank mr-1"></i> Last 30 days savings</h2>
+            <p class="text-3xl font-bold ">₹ {{last_30_days_savings|floatformat:2}}</p>
+        </div>
+
+
+
+        <div class="bg-pink-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-money-bills mr-1"></i> Current Year Income</h2>
+            <p class="text-3xl font-bold">₹ {{current_year_income|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-violet-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-wallet mr-1"></i>Current Year Expense</h2>
+            <p class="text-3xl font-bold">₹ {{current_year_expense|floatformat:2}}</p>
+        </div>
+
+        <div class="bg-yellow-500 p-6 rounded-lg shadow-md text-center">
+            <h2 class="text-xl font-semibold text-white my-1"><i class="fa-solid fa-piggy-bank mr-1"></i> Current Year savings</h2>
+            <p class="text-3xl font-bold ">₹ {{current_year_savings|floatformat:2}}</p>
+        </div>
+        
+
+
+    </div>
+
+    <br>
+    <br>
+
+
+    {% if total_income > 0 or total_expense > 0 %}
+    <div class="text-center">
+        <div class="inline-block bg-indigo-900 text-white pt-3 pb-4 px-15 rounded-md shadow-md">
+            <h2 class="text-sm md:text-3xl font-bold text-center">Income vs Expense vs Savings Overview</h2>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-10">
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">Total Income vs Expense vs savings</h3>
+            <canvas id="totalChart"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">Today's Income vs Expense</h3>
+            <canvas id="todayChart"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">Yesterday's Income vs Expense</h3>
+            <canvas id="yesterdayChart"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">This Week's Income vs Expense</h3>
+            <canvas id="weekChart"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">This Month's Income vs Expense</h3>
+            <canvas id="monthChart"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">This Year's Income vs Expense</h3>
+            <canvas id="yearChart"></canvas>
+        </div>
+    </div>
+    {% else %}
+        <p class="text-center text-gray-500 my-6">No data available to display charts. Please add some income or expenses first. <a href="{% url "transaction_add" %}" class="text-blue-600">Click here!</a> to add a transaction</p>
+    {% endif %}
+
+    <br>
+    <br>
+
+    <!-- Bar charts: last7 / last30 / year -->
+     <div class="text-center">
+        <div class="inline-block bg-indigo-900 text-white pt-3 pb-4 px-15 rounded-md shadow-md">
+            <h2 class="text-sm md:text-3xl font-bold text-center">Income vs Expense Trends</h2>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">Last 7 days Income vs Expense</h3>
+            <canvas id="weekBarChart"></canvas>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">Last 30 days Income vs Expense</h3>
+            <canvas id="monthBarChart"></canvas>
+        </div>
+
+        <div class="bg-white p-4 rounded shadow">
+            <h3 class="text-lg font-semibold text-center mb-2">Current Year (monthly) Income vs Expense</h3>
+            <canvas id="yearBarChart"></canvas>
+        </div>
+    </div>
+
+
+
+    
+    {% comment %} <div class="bg-white p-6 rounded-lg shadow-md md-8">
+        <h2 class="text-2xl font-semibold mb-4">Your Goals</h2>
+        <ul class="space-y-4">
+            {% if not goal_progress %}<span class="text-red-500 font-bold">You have not set any goals</span>{% endif %}
+            {% for item in goal_progress %}
+                <li class="flex justify-between items-center">
+                    <div class="text-gray-800">
+                        <p class="font-semibold">{{ item.goal.name }}</p>
+                        <p class="text-sm text-gray-600">Target: ₹{{ item.goal.target_amount|floatformat:2 }}</p>
+                        <p class="text-sm text-gray-600">Deadline: {{ item.goal.deadline }}</p>
+                        {% if item.achieved and item.goal.achieved_date %}
+                            <p class="mt-2 text-xs text-blue-500">Achieved on: {{ item.goal.achieved_date }}</p>
+                        {% endif %}
+                        <p class="{% if item.achieved %}text-green-600{% else %}text-red-600{% endif %} font-medium">
+                            {{ item.message }}
+                        </p>
+
+                        <div class="w-3xs bg-gray-200 rounded-full h-3 my-2">
+                            <div class="{% if item.achieved %}bg-green-600{% else %}bg-indigo-600{% endif %} h-3 rounded-full"
+                                style="width: {{ item.progress|floatformat:0 }}%"></div>    
+                        </div>
+                        <p class="text-center text-sm {% if item.achieved %}text-indigo-500{% else %}text-gray-400{% endif %}">
+                        {{ item.progress|floatformat:2 }}%
+                    </p>
+
+                    </div>
+
+                    <p class="text-xs md:text-xl font-bold {% if item.achieved %}text-indigo-500{% else %}text-gray-400{% endif %}">
+                        {{ item.progress|floatformat:2 }}%
+                    </p>
+
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    </div> {% endcomment %}
+
+
+
+    <div class="bg-white p-6 rounded-lg shadow-md md-8">
+        <h2 class="text-2xl font-semibold mb-4">Your Achieve Goals</h2>
+        <ul class="space-y-4">
+            {% if not goals %}<span class="text-red-500 font-bold">You have not achieve any goals</span>{% endif %}
+            {% for item in goals %}
+                <li class="flex justify-between items-center">
+                    <div class="text-gray-800">
+                        <p class="font-semibold">{{ item.name }}</p>
+                        <p class="text-sm text-gray-600">Target: ₹{{ item.target_amount|floatformat:2 }}</p>
+                        <p class="text-sm text-gray-600">Created date: {{ item.achieved_date }}</p>
+                        <p class="text-sm text-gray-600">Deadline: {{ item.deadline }}</p>
+                        <p class="mt-2 text-xs text-blue-500">Achieved on: {{ item.achieved_date }}</p>
+                        <p class="text-green-600 font-medium">
+                            You have achieved this goal
+                        </p>
+                        
+
+                        <div class="w-3xs bg-gray-200 rounded-full h-3 my-2">
+                            <div class="bg-green-600 h-3 rounded-full"
+                                style="width: {{ item.progress|floatformat:0 }}%">
+                            </div>    
+                        </div>
+                        <p class="text-center text-sm text-indigo-500 text-gray-400">
+                            {{ item.progress|floatformat:2 }}%
+                        </p>
+
+                    </div>
+
+                    <p class="text-xs md:text-xl invisible md:visible font-bold {% if item.achieved %}text-indigo-500{% else %}text-gray-400{% endif %}">
+                        {{ item.progress|floatformat:2 }}%
+                    </p>
+
+                </li>
+                <hr>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+
+    <div class="grid grid-cols-2 grid-rows-1 gap-4 ">
+        <div class="text-center mt-10">
+            <a href="{% url "goal_add" %}" class="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition">Set your goal</a>
+        </div>
+        <div class="text-center mt-10">
+            <a href="{% url "view_goals" %}" class="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition">View your goal</a>
+        </div>
+    </div>
+
+    
+
+</div>
+
+
+
+
+
 
 {% endblock content %}

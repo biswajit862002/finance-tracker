@@ -1,0 +1,237 @@
+{% extends "finance/base.html" %}
+{% block title %}Your Goals{% endblock %}
+
+{% comment %} {% block content %}
+
+<!-- Filter Section -->
+<div class="bg-white p-4 rounded-lg shadow mb-6 flex flex-wrap gap-2 items-center justify-between">
+    <div class="flex flex-wrap gap-2">
+        <a href="?filter=all" class="px-4 py-2 rounded-lg text-sm {% if filter_type == 'all' %}bg-indigo-500 text-white{% else %}bg-gray-200{% endif %}">All Goals</a>
+        <a href="?filter=latest5" class="px-4 py-2 rounded-lg text-sm {% if filter_type == 'latest5' %}bg-indigo-500 text-white{% else %}bg-gray-200{% endif %}">Latest 5</a>
+        <a href="?filter=latest10" class="px-4 py-2 rounded-lg text-sm {% if filter_type == 'latest10' %}bg-indigo-500 text-white{% else %}bg-gray-200{% endif %}">Latest 10</a>
+        <a href="?filter=achieved" class="px-4 py-2 rounded-lg text-sm {% if filter_type == 'achieved' %}bg-green-500 text-white{% else %}bg-gray-200{% endif %}">Achieved</a>
+        <a href="?filter=non_achieved" class="px-4 py-2 rounded-lg text-sm {% if filter_type == 'non_achieved' %}bg-red-500 text-white{% else %}bg-gray-200{% endif %}">Non-Achieved</a>
+    </div>
+
+    <form method="get" class="flex gap-2">
+        <input type="text" name="search" placeholder="Search goal name"
+               value="{{ search_query }}" class="border rounded-lg px-3 py-1 text-sm">
+        <input type="date" name="deadline" value="{{ deadline_filter }}" class="border rounded-lg px-3 py-1 text-sm">
+        <button type="submit" class="bg-indigo-500 text-white px-3 py-1 rounded-lg">Filter</button>
+    </form>
+</div>
+
+<!-- Goals List -->
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for item in goal_progress %}
+    <div class="bg-white rounded-lg shadow p-5 border">
+        <h3 class="text-lg font-semibold mb-2">{{ item.goal.name }}</h3>
+        <p class="text-sm text-gray-600">Target: ₹{{ item.goal.target_amount|floatformat:2 }}</p>
+        <p class="text-sm text-gray-600">Deadline: {{ item.goal.deadline }}</p>
+        <p class="{% if item.achieved %}text-green-600{% else %}text-red-600{% endif %} font-medium mt-2">{{ item.message }}</p>
+
+        <div class="mt-4">
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="{% if item.achieved %}bg-green-500{% else %}bg-indigo-500{% endif %} h-3 rounded-full"
+                     style="width: {{ item.progress|floatformat:0 }}%"></div>
+            </div>
+            <p class="text-right text-sm mt-1">{{ item.progress|floatformat:2 }}%</p>
+        </div>
+    </div>
+    {% empty %}
+    <p class="col-span-full text-center text-gray-500">No goals found.</p>
+    {% endfor %}
+</div>
+
+<!-- Add Goal Button -->
+<div class="text-center mt-10">
+    <a href="{% url 'goal_add' %}" class="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition">Set your goal</a>
+</div> 
+
+{% endblock %} {% endcomment %}
+
+
+
+{% comment %} {% block content %}
+<div class="px-10 rounded-lg ">
+    <h2 class="text-3xl font-bold my-4 text-center">Your Goals</h2>
+
+    <!-- Filters and Search -->
+    <form method="get" class="flex flex-col md:flex-row md:items-center md:space-x-4 mb-6 space-y-3 md:space-y-0 mt-4">
+        <select name="filter" class="border rounded p-2 w-full md:w-auto">
+            <option value="latest5" {% if filter_type == 'latest5' %}selected{% endif %}>Latest 5 Goals</option>
+            <option value="latest10" {% if filter_type == 'latest10' %}selected{% endif %}>Latest 10 Goals</option>
+            <option value="achieved" {% if filter_type == 'achieved' %}selected{% endif %}>Achieved Goals</option>
+            <option value="notachieved" {% if filter_type == 'notachieved' %}selected{% endif %}>Not Achieved Goals</option>
+            <option value="all" {% if filter_type == 'all' %}selected{% endif %}>All Goals</option>
+        </select>
+
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Search goal name"
+               class="border rounded p-2 flex-1">
+        
+        <input type="date" name="deadline" value="{{ deadline_filter }}" class="border rounded p-2 flex-1">
+
+        <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition">
+            Apply
+        </button>
+    </form>
+
+    <!-- Goals Grid -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 my-4">
+        {% for item in goal_progress %}
+            <div class="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition">
+                <h3 class="text-lg font-semibold text-gray-800">{{ item.goal.name }}</h3>
+                <p class="text-sm text-gray-600">Target: ₹{{ item.goal.target_amount|floatformat:2 }}</p>
+                <p class="text-sm text-gray-600">Deadline: {{ item.goal.deadline }}</p>
+                <p class="{% if item.achieved %}text-green-600{% else %}text-red-600{% endif %} font-medium">
+                    {{ item.message }}
+                </p>
+
+
+                <div class="mt-4">
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="{% if item.achieved %}bg-green-600{% else %}bg-red-600{% endif %} h-3 rounded-full"
+                            style="width: {{ item.progress|floatformat:0 }}%"></div>
+                    </div>
+                    <p class="mt-2 text-right text-xl font-bold {% if item.achieved %}text-indigo-500{% else %}text-gray-400{% endif %}">
+                        {{ item.progress|floatformat:2 }}%
+                    </p>
+                </div>
+
+
+                
+            </div>
+        {% empty %}
+            <p class="col-span-full text-center text-red-600">No goals found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Add Goal Button -->
+    <div class="text-center my-8">
+        <a href="{% url 'goal_add' %}" class="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow hover:bg-indigo-600 transition">
+            Set your goal
+        </a>
+    </div>
+</div>
+{% endblock %} {% endcomment %}
+
+
+
+
+{% block content %}
+<div class="px-10 rounded-lg">
+    <h2 class="text-3xl font-bold my-4 text-center">Your Goals</h2>
+    <p class="text-sm md:text-base text-gray-700 text-justify ">
+        <span class="text-red-600 font-bold">Note:</span>  When you set a goal, the system tracks only the income you earn between the goal’s creation date and its deadline. Income is allocated to goals with earlier deadlines first. If your total income in that period meets or exceeds the goal’s target amount, the goal will be marked as achieved.
+    </p>
+    
+
+    <!-- Filters and Search -->
+    <form method="get" class="flex flex-col md:flex-row md:items-center md:space-x-4 mb-6 space-y-3 md:space-y-0 mt-4">
+        <select name="filter" class="border rounded p-2 w-full md:w-auto">
+            <option value="latest5" {% if filter_type == 'latest5' %}selected{% endif %}>Latest 5 Goals</option>
+            <option value="latest10" {% if filter_type == 'latest10' %}selected{% endif %}>Latest 10 Goals</option>
+            <option value="achieved" {% if filter_type == 'achieved' %}selected{% endif %}>Achieved Goals</option>
+            <option value="notachieved" {% if filter_type == 'notachieved' %}selected{% endif %}>Not Achieved Goals</option>
+            <option value="all" {% if filter_type == 'all' %}selected{% endif %}>All Goals</option>
+        </select>
+
+        <input type="text" name="search" value="{{ search_query }}" placeholder="Search goal name"
+               class="border rounded p-2 flex-1">
+        
+        <input type="date" name="deadline" value="{{ deadline_filter }}" class="border rounded p-2 flex-1">
+
+        <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition cursor-pointer">
+            Apply
+        </button>
+    </form>
+
+    <!-- Goals Grid -->
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 my-4">
+        {% for item in goal_progress %}
+            <div class="bg-white border p-5 rounded-lg shadow hover:shadow-md transition">
+                <h3 class="text-lg font-semibold text-gray-800">{{ item.goal.name }}</h3>
+                <p class="text-sm text-gray-600">Target: ₹{{ item.goal.target_amount|floatformat:2 }}</p>
+                <p class="text-sm text-gray-600">Deadline: {{ item.goal.deadline }}</p>
+
+                <!-- Status message -->
+                {% comment %} <p class="{% if item.achieved %}text-green-600{% else %}text-red-600{% endif %} font-medium mt-2">
+                    {{ item.message }}
+                </p> {% endcomment %}
+
+                {% if item.message == "You have achieved this goal" %}
+                    <p class="text-green-600 font-medium mt-2">
+                        {{ item.message }}
+                    </p>
+                {% elif item.message == "You still haven't achieved your goal" %}
+                    <p class="text-blue-600 font-medium mt-2">
+                        {{ item.message }}
+                    </p>
+                {% else %}
+                    <p class="text-red-600 font-medium mt-2">
+                        {{ item.message }}
+                    </p>
+                {% endif %}
+
+                <!-- Progress Bar -->
+                {% comment %} <div class="mt-4">
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                        <div class="{% if item.achieved %}bg-green-600{% else %}bg-indigo-500{% endif %} h-3 rounded-full"
+                            style="width: {{ item.progress|floatformat:0 }}%"></div>
+                    </div>
+                    <p class="mt-2 text-right text-sm font-semibold text-gray-700">
+                        {{ item.progress|floatformat:2 }}%
+                    </p>
+                </div> {% endcomment %}
+
+
+                {% if item.message == "You have achieved this goal" %}
+                    <div class="mt-4">
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-green-600 h-3 rounded-full"
+                                style="width: {{ item.progress|floatformat:0 }}%"></div>
+                        </div>
+                        <p class="mt-2 text-right text-sm font-semibold text-gray-700">
+                            {{ item.progress|floatformat:2 }}%
+                        </p>
+                    </div>
+                {% elif item.message == "You still haven't achieved your goal" %}
+                    <div class="mt-4">
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-blue-600 h-3 rounded-full"
+                                style="width: {{ item.progress|floatformat:0 }}%"></div>
+                        </div>
+                        <p class="mt-2 text-right text-sm font-semibold text-gray-700">
+                            {{ item.progress|floatformat:2 }}%
+                        </p>
+                    </div>
+                {% else %}
+                    <div class="mt-4">
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-red-600 h-3 rounded-full"
+                                style="width: {{ item.progress|floatformat:0 }}%"></div>
+                        </div>
+                        <p class="mt-2 text-right text-sm font-semibold text-gray-700">
+                            {{ item.progress|floatformat:2 }}%
+                        </p>
+                    </div>
+                {% endif %}
+
+
+                {% if item.achieved and item.goal.achieved_date %}
+                    <p class="mt-2 text-xs text-gray-500">Achieved on: {{ item.goal.achieved_date }}</p>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p class="col-span-full text-center text-red-600">No goals found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Add Goal Button -->
+    <div class="text-center my-8">
+        <a href="{% url 'goal_add' %}" class="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow hover:bg-indigo-600 transition">
+            Set your goal
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "finance/base.html" %}
+{% block title %}Transaction List{% endblock title %}
+
+{% block content %}
+
+<h1 class="text-3xl font-bold text-center my-5">Transaction List</h1>
+
+<div class="flex flex-wrap justify-center gap-2 my-6">
+    {% comment %} <a href="?filter=today" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-600">Today</a>
+    <a href="?filter=yesterday" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-600">Yesterday</a>
+    <a href="?filter=last_7_days" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-600">Last 7 Days</a>
+    <a href="?filter=last_30_days" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-600">Last 30 Days</a>
+    <a href="?filter=last_6_months" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-600">Last 6 Months</a>
+    <a href="?filter=last_1_year" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-600">Last 1 Year</a>
+    <a href="?filter=all" class="bg-amber-500 text-white px-4 py-2 rounded hover:bg-blue-600">All</a> {% endcomment %}
+
+    <form method="get" class="my-6 flex flex-col sm:flex-row items-center gap-3">
+        <select name="filter"
+            class="border rounded px-4 py-2 w-full sm:w-auto bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <option value="all" {% if request.GET.filter == "all" %}selected{% endif %}>All</option>
+            <option value="today" {% if request.GET.filter == "today" %}selected{% endif %}>Today</option>
+            <option value="yesterday" {% if request.GET.filter == "yesterday" %}selected{% endif %}>Yesterday</option>
+            <option value="last_7_days" {% if request.GET.filter == "last_7_days" %}selected{% endif %}>Last 7 Days</option>
+            <option value="last_30_days" {% if request.GET.filter == "last_30_days" %}selected{% endif %}>Last 30 Days</option>
+            <option value="last_6_months" {% if request.GET.filter == "last_6_months" %}selected{% endif %}>Last 6 Months</option>
+            <option value="last_1_year" {% if request.GET.filter == "last_1_year" %}selected{% endif %}>Last 1 Year</option>
+        </select>
+
+        <button type="submit"
+            class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 transition cursor-pointer">
+            Apply
+        </button>
+    </form>
+
+</div> 
+
+
+
+
+
+{% if transactions %}
+
+<div class="w-full md:w-1/4 mx-auto my-6">
+    <div class="bg-white p-4 rounded shadow">
+        <h3 class="text-lg font-semibold text-center mb-2">Total Income vs Expense vs savings</h3>
+        <canvas id="incomeExpenseChart"></canvas>
+    </div>
+</div>
+
+
+<div class="text-center m-5">
+    <a href="{% url "export_transactions" %}?filter={{ selected_filter }}" class="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-600 transition">Generate Report</a>
+</div>
+
+<div class="overflow-x-auto mt-10">
+    <table class="min-w-9/10 table-auto border-collapse border border-gray-300 m-auto">
+        <thead>
+            <tr class="bg-gray-300">
+                <th class="px-4 py-2 border border-gray-600">S.No</th>
+                <th class="px-4 py-2 border border-gray-600">Date</th>
+                <th class="px-4 py-2 border border-gray-600">Title</th>
+                <th class="px-4 py-2 border border-gray-600">Amount</th>
+                <th class="px-4 py-2 border border-gray-600">Type</th>
+                <th class="px-4 py-2 border border-gray-600">category</th>
+            </tr>
+        </thead>
+    
+        <tbody>
+            {% for transaction in transactions %}
+                <!-- Use different background colors for odd and even rows -->
+                <tr class="odd:bg-zinc-100 even:bg-gray-100 odd:hover:bg-sky-200 even:hover:bg-sky-200 text-center">
+                    <td class="px-4 py-2 border border-gray-600">{{forloop.counter}}</td>
+                    <td class="px-4 py-2 border border-gray-600">{{transaction.date}}</td>
+                    <td class="px-4 py-2 border border-gray-600">{{transaction.title}}</td>
+                    <td class="px-4 py-2 border border-gray-600">{{transaction.amount|floatformat:2}}</td>
+                    <td class="px-4 py-2 border border-gray-600">
+                        {% if transaction.transaction_type == 'Income' %}
+                            <span class="text-green-500 font-bold">Credit</span>
+                            {% else %}
+                            <span class="text-red-500 font-bold">Debit</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-2 border border-gray-600">{{transaction.category}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% else %}
+    <div class="text-center px-4">
+        <div class="text-sm md:text-xl inline-block text-center text-red-600 font-bold mt-8">
+            You have not added any Transactions. <a href="{% url "transaction_add" %}" class="text-sm md:text-xl text-blue-600">Click here!</a> to add a transaction
+        </div>
+    </div>
+{% endif %}
+
+
+
+
+
+{% endblock content %}

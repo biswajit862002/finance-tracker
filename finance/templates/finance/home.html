@@ -1,0 +1,31 @@
+{% extends "finance/base.html" %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+
+<div class="container mx-auto p-6">
+    <div class="text-center mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold ">Welcome to <span class="text-indigo-600">Daily Expense Tracker</span></h1>
+        <p class="text-sm md:text-xl text-gray-700 my-8">Track your daily income, expenses, and golas effectively</p>
+
+        <div class="text-center my-5">
+            <a href="{% url "register" %}" class="bg-green-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition m-2"><i class="fa-solid fa-user-plus mr-1"></i> Register</a>
+            <a href="{% url "login" %}" class="bg-indigo-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-700 transition"><i class="fa-solid fa-right-to-bracket mr-1"></i> Sign-In</a>
+        </div>
+
+        <p class="text-l text-gray-700 my-8">This website is made with <i class="fa-solid fa-heart text-red-600"></i> by <span class="font-bold">Biswajit Dey</span></p>
+
+
+    </div>
+
+    
+
+    
+
+   
+    
+
+
+</div>
+
+{% endblock content %}

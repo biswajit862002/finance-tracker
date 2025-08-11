@@ -1,0 +1,77 @@
+<!-- Footer -->
+ {% load tz %}
+<footer class="bg-gray-900 text-white mt-12">
+    <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
+
+        <!-- Column 1: Social Links -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-4 text-amber-400">Social Links</h2>
+            <p class="text-gray-400 mb-4">Stay connected through my social media profiles.</p>
+            <div class="flex justify-center md:justify-start space-x-4">
+                <a href="https://www.facebook.com/profile.php?id=100053213884410" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="https://www.instagram.com/_biswa_jit_dey/" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/biswajit-dey-634878239/" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://github.com/biswajit862002" target="_blank" class="text-gray-400 hover:text-white text-xl">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+            <p class="text-sm text-gray-400 my-4">Designed and Developed By <br><span class="text-amber-400 font-bold">Biswajit Dey</span></p>
+        </div>
+
+        <!-- Column 2: Contact Info -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-4 text-amber-400">Contact Info</h2>
+            <p class="text-gray-400 flex justify-center md:justify-start items-center gap-2">
+                <i class="fas fa-phone"></i> +91 9832857859
+            </p>
+            <p class="text-gray-400 flex justify-center md:justify-start items-center gap-2 mt-2">
+                <i class="fas fa-envelope"></i> bdey862002@gmail.com
+            </p>
+            <p class="text-gray-400 flex justify-center md:justify-start items-center gap-2 mt-2">
+                <i class="fas fa-map-marker-alt"></i> Jhargram, Paschim Medinipur, West Bengal - 721517
+            </p>
+        </div>
+
+        <!-- Column 3: Quick Links -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-4 text-amber-400">Quick Links</h2>
+            <ul class="space-y-2">
+                <li><a href="{% url 'dashboard' %}" class="text-gray-400 hover:text-white">Dashboard</a></li>
+                <li><a href="{% url 'transaction_add' %}" class="text-gray-400 hover:text-white">Add Transaction</a></li>
+                <li><a href="{% url 'transaction_list' %}" class="text-gray-400 hover:text-white">Transactions</a></li>
+                <li><a href="{% url 'goal_add' %}" class="text-gray-400 hover:text-white">Add Goal</a></li>
+                <li><a href="{% url 'view_goals' %}" class="text-gray-400 hover:text-white">View Goals</a></li>
+                <li><a href="{% url 'expense_report' %}" class="text-gray-400 hover:text-white">Expense Report</a></li>
+                <li><a href="{% url 'profile' %}" class="text-gray-400 hover:text-white">Profile</a></li>
+                <li><a href="{% url 'changepass' %}" class="text-gray-400 hover:text-white">Change Password</a></li>
+            </ul>
+        </div>
+
+        <!-- Column 4: About Project -->
+        <div>
+            <h2 class="text-2xl font-semibold mb-4 text-amber-400">About Expense Tracker</h2>
+            <p class="text-gray-400 text-xs md:text-sm leading-relaxed text-justify">
+                The <span class="font-semibold text-white">Expense Tracker</span> is a smart financial
+                management tool designed to help individuals and businesses gain better control over their money.
+                With features like income and expense logging, budget tracking, goal setting, and detailed reports, it simplifies the way you monitor your finances.
+            </p>
+            <p class="text-gray-400 text-xs md:text-sm leading-relaxed mt-2 text-justify">
+                You can set savings goals, track progress, and visualize spending patterns to make informed decisions.
+                The platform also supports filtering, searching, and categorizing transactions for easy access.
+            </p>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bg-gray-800 text-center py-4 text-gray-400 text-sm">
+        © {% now "Y" %} Expense Tracker. All rights reserved.
+    </div>
+</footer>
+
+
